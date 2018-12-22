@@ -1,9 +1,9 @@
-import Ember from "ember";
+import Component from "@ember/component";
+import { computed, get, getProperties, set } from "@ember/object";
+
 import layout from "../templates/components/em-flickity";
 
-const { computed, get, getProperties, set } = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
   _widget: null,
