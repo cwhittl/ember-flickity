@@ -1,13 +1,24 @@
 {
   "name": "ember-flickity",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.1.6",
+  "description": "An ember addon for flickity.",
   "keywords": [
     "ember-addon"
   ],
-  "repository": "",
+  "repository": "travelbank/ember-flickity",
+  "bugs": "travelbank/ember-flickity/issues",
   "license": "MIT",
-  "author": "",
+  "author": "Dylan Foster <dylan947@gmail.com>",
+  "contributors": [
+    {
+      "name": "Dylan Foster",
+      "email": "dylan947@gmail.com"
+    },
+    {
+      "name": "Brian Gonzalez",
+      "email": "brian@dollarshaveclub.com"
+    }
+  ],
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -20,7 +31,9 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.6.0"
+    "ember-cli-babel": "^6.6.0",
+    "ember-cli-htmlbars": "^2.0.1",
+    "flickity": "^2.0.9"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.7.0",
@@ -28,7 +41,6 @@
     "ember-cli": "~3.3.0",
     "ember-cli-dependency-checker": "^2.0.0",
     "ember-cli-eslint": "^4.2.1",
-    "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
     "ember-cli-qunit": "^4.3.2",
