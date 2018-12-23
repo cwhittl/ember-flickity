@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { computed, get, set, getProperties } from '@ember/object';
+import { run } from '@ember/runloop';
 import layout from '../templates/components/em-flickity';
 
 export default Component.extend({
@@ -16,12 +17,6 @@ export default Component.extend({
   pageDots: false,
   selectedAttraction: 0.125,
   setGallerySize: false,
-
-  // these are for events that happen on create, if not they don't happen
-  delayTime: 200,
-  delayedEvents: computed(function getDelayedEvents() {
-    return ["ready"];
-  }),
 
   optionKeys: computed(function getOptionKeys() {
     return [
@@ -79,11 +74,11 @@ export default Component.extend({
 
   didInsertElement(...args) {
     this._super(...args);
-    if (get(this, "showSlides")) {
-      //setTimeout(() => {
+    run.later(() => {
+      if (get(this, "showSlides")) {
         set(this, "_widget", this.$().flickity(this._getOptions()));
-      //}, 0);
-    }
+      }
+    }, 0);
   },
 
   willDestroyElement() {
@@ -108,15 +103,11 @@ export default Component.extend({
 
     eventsList.forEach(key => {
       if (events[key]) {
-        const isDelayed = get(this, "delayedEvents").includes(key);
-        const delayTime = isDelayed ? get(this, "delayTime") : 0;
-
-        eventHandlers[key] = (event, pointer, cellElement, cellIndex) => {
-          setTimeout(() => {
-            const $widget = get(this, "_widget");
-            const currentIndex = cellIndex;
-            events[key](currentIndex, $widget.data("flickity"));
-          }, delayTime);
+        eventHandlers[key] = (...args) => {
+          run.later(() => {
+            const $widget = get(this, "_widget").data("flickity");
+            events[key](...args, $widget);
+          },0);
         };
       }
     });
