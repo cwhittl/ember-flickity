@@ -11,22 +11,17 @@ module('Integration | Component | em-flickity', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
     await render(hbs`{{em-flickity}}`);
     assert.equal(this.$().html().includes('flickity-wrapper'), true);
   });
 
   test('hides flickity controls if false', async function(assert) {
-    // Template block usage:
     await render(hbs`{{em-flickity}}`);
     assert.equal(this.$().find(NEXT_BUTTON).length, 0);
     assert.equal(this.$().find(PREV_BUTTON).length, 0);
   });
 
   test('hides flickity controls if true', async function(assert) {
-    // Template block usage:
     await render(hbs`
           {{#em-flickity showSlides=true}}
             <div id="slide-1"></div>
@@ -38,7 +33,6 @@ module('Integration | Component | em-flickity', function(hooks) {
   });
 
   test('passes options to flickity', async function (assert) {
-    // Template block usage:
     await render(hbs`
           {{#em-flickity pageDots=true showSlides=true}}
         {{/em-flickity}}
@@ -46,46 +40,48 @@ module('Integration | Component | em-flickity', function(hooks) {
     assert.equal(this.$().find(PAGE_DOTS).length, 1);
   });
   
-  [
-    "ready",
-    "change",
-    "select",
-    "settle",
-    "scroll",
-    "dragStart",
-    "dragMove",
-    "dragEnd",
-    "pointerDown",
-    "pointerMove",
-    "pointerUp",
-    "staticClick",
-    "lazyLoad",
-    "bgLazyLoad",
-    "fullscreenChange"
-  ].forEach(event => {
-    test(`binds to the ${event} flickity event`, async function (assert) {
-      let eventCalled;
+  test('binds flickity events using direct parameters', async function (assert) {
+    let readyEventCalled = false;
+    let selectEventCalled = false;
 
-      this.set("handler", () => { 
-        //console.log("Event", event);
-        eventCalled = true; 
-      });
-      await render(hbs`
-          {{#em-flickity showSlides=true 
-              ready=(action handler) change=(action handler) 
-              cellSelect=(action handler) select=(action handler)
-              settle=(action handler) scroll=(action handler)
-              dragStart=(action handler) dragMove=(action handler)
-              dragEnd=(action handler) pointerDown=(action handler)
-              pointerMove=(action handler) pointerUp=(action handler)
-              staticClick=(action handler) lazyLoad=(action handler)
-              bgLazyLoad=(action handler) }}
-            <div id="slide-1"></div>
-            <div id="slide-2"></div>
-          {{/em-flickity}}
-          `);
-      // this.$('.flickity-wrapper').trigger(`${event}.flickity`);
-      assert.equal(eventCalled, true);
+    this.set("readyHandler", () => { 
+      readyEventCalled = true; 
     });
+    this.set("selectHandler", () => {
+      selectEventCalled = true;
+    });
+    
+    await render(hbs`
+        {{#em-flickity showSlides=true ready=(action readyHandler) select=(action selectHandler) }}
+          <div id="slide-1"></div>
+          <div id="slide-2"></div>
+        {{/em-flickity}}
+        `);
+    this.$('.flickity-wrapper').flickity('select');
+    assert.equal(readyEventCalled, true, 'Ready Event Called');
+    assert.equal(selectEventCalled, true, 'Select Event Called');
+  });
+
+  test('binds flickity events using events parameter', async function (assert) {
+    let readyEventCalled = false;
+    let selectEventCalled = false;
+    this.set("events", {
+        ready: () => {
+          readyEventCalled = true;
+        },
+        select: () => {
+          selectEventCalled = true;
+        }
+    });
+
+    await render(hbs`
+        {{#em-flickity showSlides=true events=events}}
+          <div id="slide-1"></div>
+          <div id="slide-2"></div>
+        {{/em-flickity}}
+        `);
+    this.$('.flickity-wrapper').flickity('select');
+    assert.equal(readyEventCalled, true, 'Ready Event Called');
+    assert.equal(selectEventCalled, true, 'Select Event Called');
   });
 });

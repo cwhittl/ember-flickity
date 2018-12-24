@@ -94,19 +94,22 @@ export default Component.extend({
     const eventHandlers = {};
     let events = get(this, "events");
     let eventsList = get(this, "eventKeys");
+    let eventsFromParameters = true;
 
     if (events) {
       eventsList = Object.keys(events);
+      eventsFromParameters = false;
     } else {
       events = this.attrs; // eslint-disable-line ember/no-attrs-in-components
     }
 
     eventsList.forEach(key => {
-      if (events[key]) {
+      const eventFunc = eventsFromParameters ? get(this, key): events[key];
+      if (eventFunc) {
         eventHandlers[key] = (...args) => {
           run.later(() => {
             const $widget = get(this, "_widget").data("flickity");
-            events[key](...args, $widget);
+            eventFunc(...args, $widget);
           },0);
         };
       }
@@ -126,7 +129,7 @@ export default Component.extend({
     });
 
     const events = this._setupEvents() || {};
-
+    //console.log(events);
     if (Object.keys(events).length > 0) {
       props.on = events;
     }
