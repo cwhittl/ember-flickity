@@ -1,0 +1,7 @@
+.flickity-wrapper {
+  overflow: hidden;
+  position: relative;
+  &.loading > *  {
+    visibility: hidden;
+  }
+}
