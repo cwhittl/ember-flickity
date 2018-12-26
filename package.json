@@ -35,9 +35,11 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
+    "ember-cli-sass": "^8.0.1",
     "ember-cli-babel": "^6.6.0",
     "ember-cli-htmlbars": "^2.0.1",
-    "flickity": "^2.0.9"
+    "flickity": "^2.0.9",
+    "sass": "^1.15.2"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.7.0",
