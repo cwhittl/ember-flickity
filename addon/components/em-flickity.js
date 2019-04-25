@@ -6,12 +6,9 @@ import layout from '../templates/components/em-flickity';
 export default Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
-  classNameBindings: ['loaded:loaded:loading'],
   _widget: null,
   showSlides: false,
   events: null,
-
-  loaded: false,
 
   // some default flickity settings
   cellAlign: "center",
@@ -109,9 +106,6 @@ export default Component.extend({
       if (eventFunc) {
         eventHandlers[key] = (...args) => {
           run.later(() => {
-            if (key === 'ready') {
-              set(this, 'loaded', true);
-            }
             const $widget = get(this, "_widget").data("flickity");
             eventFunc(...args, $widget);
           },0);
