@@ -127,7 +127,6 @@ export default Component.extend({
     });
 
     const events = this._setupEvents() || {};
-    //console.log(events);
     if (Object.keys(events).length > 0) {
       props.on = events;
     }
