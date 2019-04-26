@@ -9,7 +9,6 @@ export default Component.extend({
   _widget: null,
   showSlides: false,
   events: null,
-
   // some default flickity settings
   cellAlign: "center",
   contain: true,
