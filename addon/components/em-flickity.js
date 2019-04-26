@@ -6,17 +6,9 @@ import layout from '../templates/components/em-flickity';
 export default Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
-  classNameBindings: ['isLoading:loaded:loading'],
   _widget: null,
   showSlides: false,
   events: null,
-  loaded: false,
-
-  isLoading: computed('showSlides', 'loaded', function() {
-    const showSlides = get(this, 'showSlides');
-    const loaded = get(this, 'loaded');
-    return showSlides ? loaded : true;
-  }),
   // some default flickity settings
   cellAlign: "center",
   contain: true,
@@ -113,10 +105,6 @@ export default Component.extend({
       if (eventFunc) {
         eventHandlers[key] = (...args) => {
           run.later(() => {
-            if (key === 'ready') {
-              console.log('ready');
-              set(this, 'loaded', true);
-            }
             const $widget = get(this, "_widget").data("flickity");
             eventFunc(...args, $widget);
           },0);
@@ -138,7 +126,6 @@ export default Component.extend({
     });
 
     const events = this._setupEvents() || {};
-    //console.log(events);
     if (Object.keys(events).length > 0) {
       props.on = events;
     }
